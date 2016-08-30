@@ -1,0 +1,74 @@
+<div data-title="psx.htmlc.myplugin.citizenship.submit_citizenship_scores"
+		data-param-frn="sectionFrn"
+		data-param-sectionid="sectionId"
+		data-linked-from-class-functions="true">
+	<h1>~[text]psx.htmlc.myplugin.citizenship.header,param:~(current.final.grade.name),param:~([03]Expression),param:~([2]course_name)[/text]</h1>
+
+<form action="/teachers/home.html" method="POST"
+	  data-pss-ajaxify-form
+	  data-form-failure-selector="#errorMessage">
+~[if.~[ris;cc;sectionid=~(gpv.sectionid;tagText);currentterms]=0][else]
+<div>
+<div class="alert alert-info">
+<ul>
+<li>~[text:psx.htmlc.myplugin.citizenship.info1,param:~(current.final.grade.name)]</li>
+<li>~[text:psx.htmlc.myplugin.citizenship.info2]</li>
+</ul>
+</div>
+<br>
+<center><input type="button" class="btn btn-primary" onClick="doMassFill();" value="~[text]psx.htmlc.myplugin.citizenship.mass_fill_text[/text]">
+<select name="[95]Citizenship" id="citfill">
+~[f.table_info;table=gen;fn=sel;dothisfor=ALL;*cat=Cit]
+~[f.html_popup_list;option=custom;name=[PGFinalGrades]Citizenship;table=gen;namefld=name;valuefld=name;parentfld=;sortfld=SortOrder;sortfldtype=;sortdir=1;insertblank=1;insertsel=0]
+</center>
+</div>
+[/if]
+
+<table class="table gridTable">
+~[if.~[ris;cc;sectionid=~(gpv.sectionid;tagText);currentterms]=0]
+	<tr>
+	<td>~[text:psx.htmlc.myplugin.citizenship.there_are_no_students_enrolled_in_this_class]</td>
+	</tr>
+[else]
+	<thead>   	  
+		<tr>
+			<th>~[text:psx.htmlc.myplugin.citizenship.student_name]</th>
+			<th>~[text:psx.htmlc.myplugin.citizenship.citizenship_score]</th>
+		</tr>
+    </thead>
+	<tbody>
+		<tr>~[tlist;pgfinalgrades;sectionid=~(gpv.sectionid;tagText);finalgradename=~(current.final.grade.name);grade#--;sortcmd;relstudname]
+			<td>~([Students]lastfirst)</td>
+			<td><select name="[PGFinalGrades]Citizenship">
+			~[f.table_info;table=gen;fn=sel;dothisfor=ALL;*cat=Cit]
+			~[f.html_popup_list;option=custom;name=[PGFinalGrades]Citizenship;table=gen;namefld=name;valuefld=name;parentfld=;sortfld=SortOrder;sortfldtype=;sortdir=1;insertblank=1;insertsel=0]
+			</td>
+		</tr>
+	</tbody>
+[/if]
+</table>
+<div class="button-row">
+~[if.~[ris;cc;sectionid=~[gpv:sectionid];currentterms]=0]
+<!-- No students, so no submit-->
+[else]
+	<input type="hidden" name="ac" value="webAsmt">
+	<input type="hidden" name="rn" value="~(rn)">
+	<input type="hidden" name="sectionid" value="~(gpv.sectionid;num)">
+	<button type="submit" class="btn btn-primary btn-submit pull-right">~[text:psx.htmlc.myplugin.citizenship.submit]</button>
+[/if]
+</div>
+</form>
+<script language="javascript">
+function doMassFill() {   
+    var popups = document.getElementsByTagName('select');    
+    var valueToSet = (document.getElementById('citfill')).value;
+    
+    for (i=0; i<popups.length; i++) {
+        var p = popups[i];
+        if (p.value.length == 0 && p.name.substr(0,3) == 'UF-') {
+            p.value = valueToSet;
+        }
+    }
+}
+</script>
+</div>
